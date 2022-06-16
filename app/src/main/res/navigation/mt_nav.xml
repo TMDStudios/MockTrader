@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/fragmentHome"
-        android:name="com.tmdstudios.mocktrader.FragmentHome"
+        android:name="com.tmdstudios.mocktrader.fragments.FragmentHome"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentTrader"
-        android:name="com.tmdstudios.mocktrader.FragmentTrader"
+        android:name="com.tmdstudios.mocktrader.fragments.FragmentTrader"
         android:label="fragment_trader"
         tools:layout="@layout/fragment_trader" >
         <action

@@ -3,9 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/MockTrader/app/src/main/res/drawable/border.xml" value="0.4161458333333333" />
         <entry key="..\:/AndroidStudioProjects/MockTrader/app/src/main/res/layout/activity_main.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProjects/MockTrader/app/src/main/res/layout/fragment_home.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProjects/MockTrader/app/src/main/res/layout/fragment_trader.xml" value="0.4" />
+        <entry key="..\:/AndroidStudioProjects/MockTrader/app/src/main/res/layout/trade_action.xml" value="0.4" />
       </map>
     </option>
   </component>

@@ -1,4 +1,4 @@
-package com.tmdstudios.mocktrader
+package com.tmdstudios.mocktrader.fragments
 
 import android.content.Intent
 import android.net.Uri
@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.cardview.widget.CardView
 import androidx.navigation.Navigation
+import com.tmdstudios.mocktrader.R
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
