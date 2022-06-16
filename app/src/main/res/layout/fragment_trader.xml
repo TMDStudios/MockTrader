@@ -14,21 +14,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/ivTitle"
-            app:layout_constraintTop_toTopOf="@id/clTopMain"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/mock_trader" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:id="@+id/cvGameArea"
-            app:layout_constraintTop_toBottomOf="@id/ivTitle"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/rvActions">
@@ -37,32 +28,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/purple"
+                android:textColor="@color/white"
+                android:textSize="8pt"
                 android:text="Day 0"
-                android:textAlignment="center"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/salmon"
-                android:text="BTC Price: $50,000"
-                android:textAlignment="center"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/purple"
-                android:text="0.00%"
                 android:textAlignment="center"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:layout_weight="1"
+                    android:text="BTC Price: $50,000"
+                    android:textAlignment="center"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:text="Trend: 0.00%"
+                    android:textAlignment="center"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:padding="4dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:background="@color/pink"
                     android:text="Wealth"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
@@ -72,20 +80,21 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
+                    android:background="@color/purple"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/salmon"
                         android:paddingLeft="16dp"
+                        android:textColor="@color/white"
                         android:text="Money: $10,000.00"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/orange"
                         android:paddingLeft="16dp"
+                        android:textColor="@color/white"
                         android:text="BTC: 0.00000000"/>
                 </LinearLayout>
             </LinearLayout>
@@ -93,7 +102,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/purple"
+                android:textColor="@color/white"
+                android:background="@color/dark_blue"
                 android:text="Total Wealth:  $10,000.00"
                 android:textAlignment="center"/>
 
@@ -101,6 +111,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/salmon"
+                android:textColor="@color/black"
+                android:textStyle="bold"
                 android:text="Latest News"
                 android:textAlignment="center"/>
 
@@ -108,9 +120,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/pink"
-                android:maxLines="6"
-                android:minLines="6"
+                android:textColor="@color/black"
+                android:padding="8dp"
+                android:maxLines="4"
+                android:minLines="4"
                 android:text="This is\na long\nmessage"
+                android:layout_marginBottom="8dp"
                 android:textAlignment="center"/>
 
             <LinearLayout
@@ -118,8 +133,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingLeft="32dp"
-                android:paddingRight="32dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
                 android:layout_gravity="center">
 
                 <EditText
@@ -127,7 +142,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="Enter your API Key"
+                    android:paddingStart="16dp"
+                    android:hint="0"
                     android:text=""
                     android:imeOptions="actionDone"
                     android:singleLine="true" />
@@ -138,28 +154,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:backgroundTint="@color/dark_blue"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
                     android:text="Buy" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llSell"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="32dp"
-                android:paddingRight="32dp"
-                android:layout_gravity="center">
-
-                <EditText
-                    android:id="@+id/etSell"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="Enter your API Key"
-                    android:text=""
-                    android:imeOptions="actionDone"
-                    android:singleLine="true" />
 
                 <Button
                     android:id="@+id/btSell"
@@ -167,7 +164,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:backgroundTint="@color/dark_blue"
-                    android:text="Buy" />
+                    android:text="Sell" />
 
             </LinearLayout>
 
@@ -176,8 +173,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:backgroundTint="@color/dark_blue"
                 android:text="Skip" />
 
@@ -187,11 +184,9 @@
             android:id="@+id/rvActions"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:padding="16dp"
             android:layout_margin="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:background="@drawable/border"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cvGameArea"
@@ -205,7 +200,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:backgroundTint="@color/dark_blue"
-            android:layout_marginBottom="8dp"
+            android:layout_margin="8dp"
             android:text="Home"/>
 
 
