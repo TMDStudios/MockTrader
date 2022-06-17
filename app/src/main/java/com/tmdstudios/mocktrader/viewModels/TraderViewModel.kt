@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.tmdstudios.mocktrader.R
+import com.tmdstudios.mocktrader.models.GameData
 import com.tmdstudios.mocktrader.models.News
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -17,20 +18,19 @@ import kotlin.random.Random
 
 class TraderViewModel: ViewModel() {
     private var newsData: MutableLiveData<News> = MutableLiveData()
+    private var gameData: MutableLiveData<GameData> = MutableLiveData()
 
-    private var day = 0
-    private val lastDay = 0
-    private val money = 10000.0
-    private val btc = 0.0
-    private val total = 10000.0
-    private val btcPrice = 50000.0
-    private val lastBtcPrice = 50000.0
-    private val trend = 0.0
+    private var myGameData: GameData
     private var actions: MutableLiveData<ArrayList<String>> = MutableLiveData()
     private var listOfActions: ArrayList<String> = ArrayList()
 
     init {
+        myGameData = GameData(0, 0, 10000.0, 0.0, 10000.0, 50000.0, 50000.0, 0.0)
+        gameData.postValue(myGameData)
+    }
 
+    fun getGameDataObserver(): MutableLiveData<GameData> {
+        return gameData
     }
 
     fun getActionsObserver(): MutableLiveData<ArrayList<String>> {
@@ -77,5 +77,33 @@ class TraderViewModel: ViewModel() {
         listOfActions.add(actionMsg)
         actions.postValue(listOfActions)
     }
+
+    fun buy(amount: Double){
+        if(amount <= gameData.value!!.money){
+            myGameData.day++
+            requestAPI()
+            myGameData.money-=amount
+            myGameData.btc+=amount/myGameData.btcPrice
+            addAction("Day ${myGameData.day} - Bought ${amount/myGameData.btcPrice} BTC at $${myGameData.btcPrice}")
+            myGameData.lastBtcPrice = myGameData.btcPrice
+            val r = Random.nextInt(10)/10
+            try{
+                if(newsData.value!!.effect > 0){
+                    val priceChange = 0.025 + (0.05 - 0.033) * r
+                    myGameData.btcPrice+=myGameData.btcPrice*priceChange
+                }else{
+                    val priceChange = 0.033 + (0.05 - 0.033) * r
+                    myGameData.btcPrice+=myGameData.btcPrice*priceChange
+                }
+            }catch(e: Exception){
+                Log.d("TraderViewModel", "ISSUE: $e")
+            }
+            gameData.postValue(myGameData)
+        }
+    }
+
+    fun sell(){}
+
+    fun skip(){}
 
 }

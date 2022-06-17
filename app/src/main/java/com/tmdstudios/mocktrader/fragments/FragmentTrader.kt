@@ -1,5 +1,6 @@
 package com.tmdstudios.mocktrader.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ class FragmentTrader : Fragment() {
     private lateinit var rvTxn: RecyclerView
     private lateinit var rvAdapter: TxnAdapter
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,12 +45,26 @@ class FragmentTrader : Fragment() {
                     view.findViewById<TextView>(R.id.tvNews).text = latestNews.news
                 }
         })
+        viewModel.getGameDataObserver().observe(viewLifecycleOwner, Observer {
+                gameData -> run {
+            view.findViewById<TextView>(R.id.tvDay).text = "Day ${gameData.day}"
+            view.findViewById<TextView>(R.id.tvBtcPrice).text = "BTC Price: $${gameData.btcPrice}"
+            view.findViewById<TextView>(R.id.tvTrend).text = "Trend: ${gameData.trend}%"
+            view.findViewById<TextView>(R.id.tvMoney).text = "Money: $${gameData.money}"
+            view.findViewById<TextView>(R.id.tvBTC).text = "BTC: ${gameData.btc}"
+            view.findViewById<TextView>(R.id.tvTotalWealth).text = "Total Wealth: $${gameData.total}"
+        }
+        })
         viewModel.getActionsObserver().observe(viewLifecycleOwner, Observer {
             actionList -> rvAdapter.setData(actionList)
         })
 
         view.findViewById<Button>(R.id.btHome).setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragmentTrader_to_fragmentHome)
+        }
+
+        view.findViewById<Button>(R.id.btBuy).setOnClickListener {
+            viewModel.buy(100.0)
         }
 
         view.findViewById<Button>(R.id.btSkip).setOnClickListener {

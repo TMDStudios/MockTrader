@@ -27,6 +27,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/tvDay"
                 android:background="@color/purple"
                 android:textColor="@color/white"
                 android:textSize="8pt"
@@ -42,6 +43,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/tvBtcPrice"
                     android:background="@color/white"
                     android:layout_weight="1"
                     android:text="BTC Price: $50,000"
@@ -50,6 +52,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/tvTrend"
                     android:layout_weight="1"
                     android:background="@color/white"
                     android:text="Trend: 0.00%"
@@ -86,6 +89,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/tvMoney"
                         android:paddingLeft="16dp"
                         android:textColor="@color/white"
                         android:text="Money: $10,000.00"/>
@@ -93,6 +97,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/tvBTC"
                         android:paddingLeft="16dp"
                         android:textColor="@color/white"
                         android:text="BTC: 0.00000000"/>
@@ -102,6 +107,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/tvTotalWealth"
                 android:textColor="@color/white"
                 android:background="@color/dark_blue"
                 android:text="Total Wealth:  $10,000.00"
