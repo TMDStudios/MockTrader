@@ -49,6 +49,7 @@ class TraderViewModel: ViewModel() {
     }
 
     private fun handleNews(){
+        if(myGameData.day==1){addAction("")}
         CoroutineScope(IO).launch {
             val data = async { fetchData() }.await()
             if(data.isNotEmpty()){
@@ -92,7 +93,7 @@ class TraderViewModel: ViewModel() {
                 handleNews()
                 myGameData.money-=amount
                 myGameData.btc+=amount/myGameData.btcPrice
-                addAction("Day ${myGameData.day} - Bought ${amount/myGameData.btcPrice} BTC at $${myGameData.btcPrice}")
+                addAction(String.format("Day: ${myGameData.day} - Bought %.8f BTC at $%.3f", amount/myGameData.btcPrice, myGameData.btcPrice))
                 myGameData.lastBtcPrice = myGameData.btcPrice
                 myGameData.total = myGameData.btc*myGameData.btcPrice+myGameData.money
                 val priceDifference = updatePrice()
@@ -117,7 +118,7 @@ class TraderViewModel: ViewModel() {
                 handleNews()
                 myGameData.money+=amount
                 myGameData.btc-=amount/myGameData.btcPrice
-                addAction("Day ${myGameData.day} - Sold ${amount/myGameData.btcPrice} BTC at $${myGameData.btcPrice}")
+                addAction(String.format("Day: ${myGameData.day} - Sold %.8f BTC at $%.3f", amount/myGameData.btcPrice, myGameData.btcPrice))
                 myGameData.lastBtcPrice = myGameData.btcPrice
                 myGameData.total = myGameData.btc*myGameData.btcPrice+myGameData.money
                 val priceDifference = updatePrice()
