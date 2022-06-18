@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.navigation.Navigation
@@ -52,6 +53,12 @@ class FragmentHome : Fragment() {
         cvGit = view.findViewById(R.id.cvGit)
         cvGit.setOnClickListener {
             val uri = Uri.parse("https://github.com/TMDStudios/MockTrader")
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
+        }
+
+        view.findViewById<TextView>(R.id.tvMoreFromTMD).setOnClickListener {
+            val uri = Uri.parse("https://tmdstudios.wordpress.com")
             val intent = Intent(Intent.ACTION_VIEW, uri)
             startActivity(intent)
         }
