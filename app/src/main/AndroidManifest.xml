@@ -12,14 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MockTrader">
         <activity
-            android:name=".MainActivity"
-            android:screenOrientation="sensorPortrait"
+            android:name=".splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="sensorPortrait"
+            android:exported="true">
         </activity>
     </application>
 
