@@ -1,6 +1,9 @@
 package com.tmdstudios.mocktrader.fragments
 
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,17 +11,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.navigation.Navigation
 import com.tmdstudios.mocktrader.R
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 class FragmentHome : Fragment() {
     private lateinit var cvGit: CardView
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,8 +27,26 @@ class FragmentHome : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
+        sharedPreferences = this.requireActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+
         view.findViewById<Button>(R.id.btStart).setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_fragmentHome_to_fragmentTrader)
+        }
+
+        view.findViewById<Button>(R.id.btReset).setOnClickListener {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setMessage("Reset the game?")
+                .setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
+                        with(sharedPreferences.edit()) {
+                            putBoolean("reset", true)
+                            apply()
+                        }
+                        Navigation.findNavController(view).navigate(R.id.action_fragmentHome_to_fragmentTrader)
+                    })
+                .setNegativeButton("No", DialogInterface.OnClickListener { dialog, id ->
+                        Navigation.findNavController(view).navigate(R.id.action_fragmentHome_to_fragmentTrader)
+                    })
+            builder.create().show()
         }
 
         cvGit = view.findViewById(R.id.cvGit)

@@ -1,9 +1,10 @@
 package com.tmdstudios.mocktrader.viewModels
 
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.tmdstudios.mocktrader.R
+import com.google.android.material.snackbar.Snackbar
 import com.tmdstudios.mocktrader.models.GameData
 import com.tmdstudios.mocktrader.models.News
 import kotlinx.coroutines.CoroutineScope
@@ -20,13 +21,19 @@ class TraderViewModel: ViewModel() {
     private var newsData: MutableLiveData<News> = MutableLiveData()
     private var gameData: MutableLiveData<GameData> = MutableLiveData()
 
-    private var myGameData: GameData
+    private var myGameData = GameData(0, 0, 10000.0, 0.0, 10000.0, 50000.0, 50000.0, 0.0)
     private var actions: MutableLiveData<ArrayList<String>> = MutableLiveData()
     private var listOfActions: ArrayList<String> = ArrayList()
 
+    private var errorMessage: MutableLiveData<String> = MutableLiveData()
+
     init {
-        myGameData = GameData(0, 0, 10000.0, 0.0, 10000.0, 50000.0, 50000.0, 0.0)
         gameData.postValue(myGameData)
+        handleNews()
+    }
+
+    fun getErrorMessageObserver(): MutableLiveData<String> {
+        return errorMessage
     }
 
     fun getGameDataObserver(): MutableLiveData<GameData> {
@@ -41,7 +48,7 @@ class TraderViewModel: ViewModel() {
         return newsData
     }
 
-    fun requestAPI(){
+    private fun handleNews(){
         CoroutineScope(IO).launch {
             val data = async { fetchData() }.await()
             if(data.isNotEmpty()){
@@ -79,31 +86,122 @@ class TraderViewModel: ViewModel() {
     }
 
     fun buy(amount: Double){
-        if(amount <= gameData.value!!.money){
-            myGameData.day++
-            requestAPI()
-            myGameData.money-=amount
-            myGameData.btc+=amount/myGameData.btcPrice
-            addAction("Day ${myGameData.day} - Bought ${amount/myGameData.btcPrice} BTC at $${myGameData.btcPrice}")
-            myGameData.lastBtcPrice = myGameData.btcPrice
-            val r = Random.nextInt(10)/10
-            try{
-                if(newsData.value!!.effect > 0){
-                    val priceChange = 0.025 + (0.05 - 0.033) * r
-                    myGameData.btcPrice+=myGameData.btcPrice*priceChange
+        if(amount>0){
+            if(amount <= gameData.value!!.money){
+                myGameData.day++
+                handleNews()
+                myGameData.money-=amount
+                myGameData.btc+=amount/myGameData.btcPrice
+                addAction("Day ${myGameData.day} - Bought ${amount/myGameData.btcPrice} BTC at $${myGameData.btcPrice}")
+                myGameData.lastBtcPrice = myGameData.btcPrice
+                myGameData.total = myGameData.btc*myGameData.btcPrice+myGameData.money
+                val priceDifference = updatePrice()
+                if(priceDifference!=0.0){
+                    myGameData.btcPrice+=priceDifference
+                    gameData.postValue(myGameData)
                 }else{
-                    val priceChange = 0.033 + (0.05 - 0.033) * r
-                    myGameData.btcPrice+=myGameData.btcPrice*priceChange
+                    errorMessage.postValue("Unable to get news data\nCheck internet connection")
                 }
-            }catch(e: Exception){
-                Log.d("TraderViewModel", "ISSUE: $e")
+            }else{
+                errorMessage.postValue("Insufficient funds!")
             }
-            gameData.postValue(myGameData)
+        }else{
+            errorMessage.postValue("Amount must be greater than 0")
         }
     }
 
-    fun sell(){}
+    fun sell(amount: Double){
+        if(amount>0){
+            if(amount <= gameData.value!!.btc * gameData.value!!.btcPrice){
+                myGameData.day++
+                handleNews()
+                myGameData.money+=amount
+                myGameData.btc-=amount/myGameData.btcPrice
+                addAction("Day ${myGameData.day} - Sold ${amount/myGameData.btcPrice} BTC at $${myGameData.btcPrice}")
+                myGameData.lastBtcPrice = myGameData.btcPrice
+                myGameData.total = myGameData.btc*myGameData.btcPrice+myGameData.money
+                val priceDifference = updatePrice()
+                if(priceDifference!=0.0){
+                    myGameData.btcPrice+=priceDifference
+                    gameData.postValue(myGameData)
+                }else{
+                    errorMessage.postValue("Unable to get news data\nCheck internet connection")
+                }
+            }else{
+                errorMessage.postValue("Insufficient funds!")
+            }
+        }else{
+            errorMessage.postValue("Amount must be greater than 0")
+        }
+    }
 
-    fun skip(){}
+    fun skip(){
+        myGameData.day++
+        handleNews()
+        addAction("Day ${myGameData.day} - Skipped")
+        val priceDifference = updatePrice()
+        if(priceDifference!=0.0){
+            myGameData.btcPrice+=priceDifference
+            gameData.postValue(myGameData)
+        }else{
+            errorMessage.postValue("Unable to get news data\nCheck internet connection")
+        }
+    }
 
+    private fun updatePrice(): Double{
+        var priceDifference = 0.0
+        // Add price volatility (linked to effect)
+        try{
+            val r = Random.nextInt(10)/10
+            priceDifference = if(newsData.value!!.effect > 0){
+                val priceChange = 0.025 + (0.05 - 0.033) * r
+                myGameData.btcPrice*priceChange
+            }else{
+                val priceChange = 0.033 + (0.05 - 0.033) * r
+                myGameData.btcPrice*priceChange
+            }
+
+            // Add news effect
+            myGameData.btcPrice += myGameData.btcPrice * newsData.value!!.effect
+            myGameData.trend = (1-myGameData.lastBtcPrice/myGameData.btcPrice) * 100
+        }catch(e: Exception){
+            Log.d("TraderViewModel", "ISSUE: $e")
+        }
+
+        return priceDifference
+    }
+
+    fun saveData(sharedPreferences: SharedPreferences){
+        with(sharedPreferences.edit()) {
+            putInt("day", myGameData.day)
+            putInt("lastDay", myGameData.lastDay)
+            putString("money", myGameData.money.toString())
+            putString("btc", myGameData.btc.toString())
+            putString("total", myGameData.total.toString())
+            putString("btcPrice", myGameData.btcPrice.toString())
+            putString("lastBtcPrice", myGameData.lastBtcPrice.toString())
+            putString("trend", myGameData.trend.toString())
+            apply()
+        }
+    }
+
+    fun loadData(sharedPreferences: SharedPreferences){
+        myGameData = GameData(
+            sharedPreferences.getInt("day", 0),
+            sharedPreferences.getInt("lastDay", 0),
+            sharedPreferences.getString("money", "10000").toString().toDouble(),
+            sharedPreferences.getString("btc", "0").toString().toDouble(),
+            sharedPreferences.getString("total", "10000").toString().toDouble(),
+            sharedPreferences.getString("btcPrice", "50000").toString().toDouble(),
+            sharedPreferences.getString("lastBtcPrice", "50000").toString().toDouble(),
+            sharedPreferences.getString("trend", "0").toString().toDouble()
+        )
+        gameData.postValue(myGameData)
+    }
+
+    fun resetData(sharedPreferences: SharedPreferences){
+        myGameData = GameData(0, 0, 10000.0, 0.0, 10000.0, 50000.0, 50000.0, 0.0)
+        gameData.postValue(myGameData)
+        saveData(sharedPreferences)
+    }
 }

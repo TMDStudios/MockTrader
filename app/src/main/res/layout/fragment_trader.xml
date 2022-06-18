@@ -9,7 +9,7 @@
     <!-- TODO: Update blank fragment layout -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clTopMain"
+        android:id="@+id/clMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -154,7 +154,7 @@
                 android:layout_gravity="center">
 
                 <EditText
-                    android:id="@+id/etBuy"
+                    android:id="@+id/etAmount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

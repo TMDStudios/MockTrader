@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">MockTrader</string>
+    <string name="preference_file_key">com.tmdstudios.MockTrader.PREFERENCE_FILE_KEY</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="welcome">Welcome trader! The goal of this game is to accumulate as much wealth as possible in 100 days. Each day, you can buy or sell BTC by entering the dollar amount and clicking on the corresponding button. You can also click \'SKIP\' to go to the next day. The BTC price will fluctuate based on the news of the day. Buy low and sell high! Will you be the next (mock) Bitcoin Billionaire?</string>
+    <string name="welcome">Welcome trader!\nThe goal of this game is to accumulate as much wealth as possible in 100 days.
+        Each day, you can buy or sell BTC by entering the dollar amount and clicking on the corresponding button.\nYou can
+        also click \'SKIP\' to go to the next day. The BTC price will fluctuate based on the news of the day. Buy low and
+        sell high! Will you be the next (mock) Bitcoin Billionaire?</string>
 </resources>

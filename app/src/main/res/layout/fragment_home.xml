@@ -28,11 +28,22 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/cvGit"
+            app:layout_constraintBottom_toTopOf="@id/btReset"
             android:id="@+id/btStart"
             android:layout_margin="8dp"
             android:backgroundTint="@color/dark_blue"
             android:text="Start Trading"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/cvGit"
+            android:id="@+id/btReset"
+            android:layout_margin="8dp"
+            android:backgroundTint="@color/dark_blue"
+            android:text="Reset Game"/>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
