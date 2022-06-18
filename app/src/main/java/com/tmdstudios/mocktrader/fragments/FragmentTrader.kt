@@ -3,6 +3,7 @@ package com.tmdstudios.mocktrader.fragments
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -69,6 +70,11 @@ class FragmentTrader : Fragment() {
                 view.findViewById<TextView>(R.id.tvDay).text = "Day ${gameData.day}"
                 view.findViewById<TextView>(R.id.tvBtcPrice).text = String.format("BTC Price: $%.3f", gameData.btcPrice)
                 view.findViewById<TextView>(R.id.tvTrend).text = String.format("Trend: %.3f", gameData.trend)+"%"
+                when{
+                    gameData.trend < 0 -> view.findViewById<TextView>(R.id.tvTrend).setTextColor(Color.RED)
+                    gameData.trend > 0 -> view.findViewById<TextView>(R.id.tvTrend).setTextColor(Color.rgb(0,185,15))
+                    else -> view.findViewById<TextView>(R.id.tvTrend).setTextColor(Color.BLACK)
+                }
                 view.findViewById<TextView>(R.id.tvMoney).text = String.format("Money: $%.2f", gameData.money)
                 view.findViewById<TextView>(R.id.tvBTC).text = String.format("BTC: %.8f", gameData.btc)
                 view.findViewById<TextView>(R.id.tvTotalWealth).text = String.format("Total Wealth: $%.2f", gameData.total)

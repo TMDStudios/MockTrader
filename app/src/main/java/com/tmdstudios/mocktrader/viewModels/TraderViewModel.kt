@@ -94,7 +94,6 @@ class TraderViewModel: ViewModel() {
                 myGameData.money-=amount
                 myGameData.btc+=amount/myGameData.btcPrice
                 addAction(String.format("Day: ${myGameData.day} - Bought %.8f BTC at $%.3f", amount/myGameData.btcPrice, myGameData.btcPrice))
-                myGameData.lastBtcPrice = myGameData.btcPrice
                 myGameData.total = myGameData.btc*myGameData.btcPrice+myGameData.money
                 val priceDifference = updatePrice()
                 if(priceDifference!=0.0){
@@ -119,7 +118,6 @@ class TraderViewModel: ViewModel() {
                 myGameData.money+=amount
                 myGameData.btc-=amount/myGameData.btcPrice
                 addAction(String.format("Day: ${myGameData.day} - Sold %.8f BTC at $%.3f", amount/myGameData.btcPrice, myGameData.btcPrice))
-                myGameData.lastBtcPrice = myGameData.btcPrice
                 myGameData.total = myGameData.btc*myGameData.btcPrice+myGameData.money
                 val priceDifference = updatePrice()
                 if(priceDifference!=0.0){
@@ -150,6 +148,7 @@ class TraderViewModel: ViewModel() {
     }
 
     private fun updatePrice(): Double{
+        myGameData.lastBtcPrice = myGameData.btcPrice
         var priceDifference = 0.0
         // Add price volatility (linked to effect)
         try{
