@@ -137,17 +137,10 @@ class TraderViewModel: ViewModel() {
         // Add price volatility (linked to effect)
         try{
             val r = Random.nextDouble(0.01, 0.055)
-            val priceDifference = if(newsData.value!!.effect > 0){
-                0.05 - r
-            }else{
-                0.01 - r
-            }
+            val priceDifference = if(newsData.value!!.effect>0){0.05-r}else{0.01-r}
             myGameData.btcPrice += myGameData.btcPrice * (newsData.value!!.effect+priceDifference)
+            if(myGameData.btcPrice<10000){myGameData.btcPrice=10000.0+100*priceDifference}
             myGameData.trend = (1-myGameData.lastBtcPrice/myGameData.btcPrice) * 100
-            if(myGameData.btcPrice<10000){
-                myGameData.btcPrice=10000.0+100*priceDifference
-                myGameData.trend = (1-myGameData.lastBtcPrice/myGameData.btcPrice) * 100
-            }
             gameData.postValue(myGameData)
         }catch(e: Exception){
             errorMessage.postValue("Unable to get news data\nCheck internet connection")
