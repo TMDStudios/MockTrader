@@ -98,13 +98,7 @@ class TraderViewModel: ViewModel() {
                 myGameData.btc+=amount/myGameData.btcPrice
                 addAction(String.format("Day ${myGameData.day} - Bought %.8f BTC at $%.3f", amount/myGameData.btcPrice, myGameData.btcPrice))
                 myGameData.total = myGameData.btc*myGameData.btcPrice+myGameData.money
-                val priceDifference = updatePrice()
-                if(priceDifference!=0.0){
-                    myGameData.btcPrice+=priceDifference
-                    gameData.postValue(myGameData)
-                }else{
-                    errorMessage.postValue("Unable to get news data\nCheck internet connection")
-                }
+                updatePrice()
             }else{
                 errorMessage.postValue("Insufficient funds!")
             }
@@ -122,13 +116,7 @@ class TraderViewModel: ViewModel() {
                 myGameData.btc-=amount/myGameData.btcPrice
                 addAction(String.format("Day ${myGameData.day} - Sold %.8f BTC at $%.3f", amount/myGameData.btcPrice, myGameData.btcPrice))
                 myGameData.total = myGameData.btc*myGameData.btcPrice+myGameData.money
-                val priceDifference = updatePrice()
-                if(priceDifference!=0.0){
-                    myGameData.btcPrice+=priceDifference
-                    gameData.postValue(myGameData)
-                }else{
-                    errorMessage.postValue("Unable to get news data\nCheck internet connection")
-                }
+                updatePrice()
             }else{
                 errorMessage.postValue("Insufficient funds!")
             }
@@ -141,37 +129,30 @@ class TraderViewModel: ViewModel() {
         myGameData.day++
         handleNews()
         addAction("Day ${myGameData.day} - Skipped")
-        val priceDifference = updatePrice()
-        if(priceDifference!=0.0){
-            myGameData.btcPrice+=priceDifference
-            gameData.postValue(myGameData)
-        }else{
-            errorMessage.postValue("Unable to get news data\nCheck internet connection")
-        }
+        updatePrice()
     }
 
-    private fun updatePrice(): Double{
+    private fun updatePrice(){
         myGameData.lastBtcPrice = myGameData.btcPrice
-        var priceDifference = 0.0
         // Add price volatility (linked to effect)
         try{
-            val r = Random.nextInt(10)/10
-            priceDifference = if(newsData.value!!.effect > 0){
-                val priceChange = 0.025 + (0.05 - 0.033) * r
-                myGameData.btcPrice*priceChange
+            val r = Random.nextDouble(0.01, 0.055)
+            val priceDifference = if(newsData.value!!.effect > 0){
+                0.05 - r
             }else{
-                val priceChange = 0.033 + (0.05 - 0.033) * r
-                myGameData.btcPrice*priceChange
+                0.01 - r
             }
-
-            // Add news effect
-            myGameData.btcPrice += myGameData.btcPrice * newsData.value!!.effect
+            myGameData.btcPrice += myGameData.btcPrice * (newsData.value!!.effect+priceDifference)
             myGameData.trend = (1-myGameData.lastBtcPrice/myGameData.btcPrice) * 100
+            if(myGameData.btcPrice<10000){
+                myGameData.btcPrice=10000.0+100*priceDifference
+                myGameData.trend = (1-myGameData.lastBtcPrice/myGameData.btcPrice) * 100
+            }
+            gameData.postValue(myGameData)
         }catch(e: Exception){
+            errorMessage.postValue("Unable to get news data\nCheck internet connection")
             Log.d("TraderViewModel", "ISSUE: $e")
         }
-
-        return priceDifference
     }
 
     fun saveData(sharedPreferences: SharedPreferences){
