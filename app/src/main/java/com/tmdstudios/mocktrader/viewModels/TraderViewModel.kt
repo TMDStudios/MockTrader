@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
+import com.google.gson.JsonElement
 import com.tmdstudios.mocktrader.models.GameData
 import com.tmdstudios.mocktrader.models.News
 import kotlinx.coroutines.CoroutineScope
@@ -14,6 +16,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
+import org.json.JSONObject
 import java.net.URL
 import kotlin.random.Random
 
@@ -93,7 +96,7 @@ class TraderViewModel: ViewModel() {
                 handleNews()
                 myGameData.money-=amount
                 myGameData.btc+=amount/myGameData.btcPrice
-                addAction(String.format("Day: ${myGameData.day} - Bought %.8f BTC at $%.3f", amount/myGameData.btcPrice, myGameData.btcPrice))
+                addAction(String.format("Day ${myGameData.day} - Bought %.8f BTC at $%.3f", amount/myGameData.btcPrice, myGameData.btcPrice))
                 myGameData.total = myGameData.btc*myGameData.btcPrice+myGameData.money
                 val priceDifference = updatePrice()
                 if(priceDifference!=0.0){
@@ -117,7 +120,7 @@ class TraderViewModel: ViewModel() {
                 handleNews()
                 myGameData.money+=amount
                 myGameData.btc-=amount/myGameData.btcPrice
-                addAction(String.format("Day: ${myGameData.day} - Sold %.8f BTC at $%.3f", amount/myGameData.btcPrice, myGameData.btcPrice))
+                addAction(String.format("Day ${myGameData.day} - Sold %.8f BTC at $%.3f", amount/myGameData.btcPrice, myGameData.btcPrice))
                 myGameData.total = myGameData.btc*myGameData.btcPrice+myGameData.money
                 val priceDifference = updatePrice()
                 if(priceDifference!=0.0){
@@ -181,6 +184,9 @@ class TraderViewModel: ViewModel() {
             putString("btcPrice", myGameData.btcPrice.toString())
             putString("lastBtcPrice", myGameData.lastBtcPrice.toString())
             putString("trend", myGameData.trend.toString())
+            // Save ArrayList in sharedPreferences
+            val actionsData = Gson().toJson(listOfActions)
+            putString("actions", actionsData)
             apply()
         }
     }
@@ -197,6 +203,13 @@ class TraderViewModel: ViewModel() {
             sharedPreferences.getString("trend", "0").toString().toDouble()
         )
         gameData.postValue(myGameData)
+        val savedActions = sharedPreferences.getString("actions", null)
+        if(savedActions!=null){
+            val gson = Gson()
+            listOfActions = gson.fromJson(savedActions, ArrayList<String>()::class.java)
+        }
+
+        actions.postValue(listOfActions)
     }
 
     fun resetData(sharedPreferences: SharedPreferences){

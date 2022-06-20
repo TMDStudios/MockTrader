@@ -57,8 +57,6 @@ class FragmentTrader : Fragment() {
 
         viewModel.loadData(sharedPreferences)
 
-        viewModel.addAction(getString(R.string.welcome))
-
         viewModel.getNewsDataObserver().observe(viewLifecycleOwner, Observer {
             latestNews -> run {
                 view.findViewById<TextView>(R.id.tvNewsSource).text = latestNews.source
@@ -82,7 +80,12 @@ class FragmentTrader : Fragment() {
             }
         })
         viewModel.getActionsObserver().observe(viewLifecycleOwner, Observer {
-            actionList -> rvAdapter.setData(actionList.reversed())
+            actionList -> run {
+                if (actionList.isNullOrEmpty()) {
+                    viewModel.addAction(getString(R.string.welcome))
+                }
+                rvAdapter.setData(actionList.reversed())
+            }
         })
         viewModel.getErrorMessageObserver().observe(viewLifecycleOwner, Observer {
             errorMessage -> Snackbar.make(view.findViewById(R.id.clMain), errorMessage, Snackbar.LENGTH_LONG).show()
