@@ -97,7 +97,6 @@ class TraderViewModel: ViewModel() {
                 myGameData.money-=amount
                 myGameData.btc+=amount/myGameData.btcPrice
                 addAction(String.format("Day ${myGameData.day} - Bought %.8f BTC at $%.3f", amount/myGameData.btcPrice, myGameData.btcPrice))
-                myGameData.total = myGameData.btc*myGameData.btcPrice+myGameData.money
                 updatePrice()
             }else{
                 errorMessage.postValue("Insufficient funds!")
@@ -115,7 +114,6 @@ class TraderViewModel: ViewModel() {
                 myGameData.money+=amount
                 myGameData.btc-=amount/myGameData.btcPrice
                 addAction(String.format("Day ${myGameData.day} - Sold %.8f BTC at $%.3f", amount/myGameData.btcPrice, myGameData.btcPrice))
-                myGameData.total = myGameData.btc*myGameData.btcPrice+myGameData.money
                 updatePrice()
             }else{
                 errorMessage.postValue("Insufficient funds!")
@@ -133,6 +131,7 @@ class TraderViewModel: ViewModel() {
     }
 
     private fun updatePrice(){
+        myGameData.total = myGameData.btc*myGameData.btcPrice+myGameData.money
         myGameData.lastBtcPrice = myGameData.btcPrice
         // Add price volatility (linked to effect)
         try{
