@@ -2,7 +2,7 @@
 
 ![App Badge](https://img.shields.io/badge/app-android-brightgreen)
 
-![Crypto Ledger Logo](/app/src/main/res/drawable/mock_trader.png)
+![Mock Trader Logo](/app/src/main/res/drawable/mock_trader.png)
 
 The Mock Trader App is an open-source Bitcoin trading game
 
