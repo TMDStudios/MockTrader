@@ -14,10 +14,12 @@ Each news item will increase or decrease the price of Bitcoin
 
 >The game is available on Google Play: https://play.google.com/store/apps/details?id=com.tmdstudios.mocktrader
 
->The web version is hosted on Heroku and can be found here: https://open-mock-trader.herokuapp.com/
+>The web version is hosted on Heroku and can be found here: https://mocktrader-prod-mocktrader-wdutfz.mo4.mogenius.io/
 
 ## You may also like...
 
 [Crypto Ledger](https://play.google.com/store/apps/details?id=com.tmdstudios.cryptoledgerkotlin 'Crypto Ledger') - Open-source app for tracking cryptocurrency trades
 
 [Py Learning Companion](https://play.google.com/store/apps/details?id=com.tmdstudios.python 'Py Learning Companion') - Python Study App
+
+[Game Room](https://github.com/TMDStudios/GameRoom 'Game Room') - A platform for educators to play games and/or review materials with their students
