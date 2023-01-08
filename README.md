@@ -14,7 +14,7 @@ Each news item will increase or decrease the price of Bitcoin
 
 >The game is available on Google Play: https://play.google.com/store/apps/details?id=com.tmdstudios.mocktrader
 
->The web version is hosted on Heroku and can be found here: https://mocktrader-prod-mocktrader-wdutfz.mo4.mogenius.io/
+>The web version is hosted on Mogenius and can be found here: https://mocktrader-prod-mocktrader-wdutfz.mo4.mogenius.io/
 
 ## You may also like...
 
